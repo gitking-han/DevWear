@@ -1,12 +1,10 @@
 "use client";
-
 export const dynamic = "force-dynamic";
 
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
-
 
 export default function ResetPasswordPage() {
   const router = useRouter();
@@ -20,9 +18,7 @@ export default function ResetPasswordPage() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (!token) {
-      setError("Invalid or missing reset token.");
-    }
+    if (!token) setError("Invalid or missing reset token.");
   }, [token]);
 
   const handleReset = async (e) => {
@@ -46,9 +42,8 @@ export default function ResetPasswordPage() {
 
       const data = await res.json();
 
-      if (!res.ok) {
-        setError(data.error || "Unable to reset password.");
-      } else {
+      if (!res.ok) setError(data.error || "Unable to reset password.");
+      else {
         setMessage("Password reset successful! Redirecting to login...");
         setTimeout(() => router.push("/login"), 1500);
       }
@@ -63,73 +58,34 @@ export default function ResetPasswordPage() {
   return (
     <>
       <Navbar />
-
       <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
         <div className="max-w-md w-full bg-white rounded-2xl shadow-lg p-8">
-          <h2 className="text-3xl font-bold text-center text-pink-600">
-            Reset Password
-          </h2>
+          <h2 className="text-3xl font-bold text-center text-pink-600">Reset Password</h2>
+          <p className="text-gray-600 text-center mt-2">Create a new password for your account.</p>
 
-          <p className="text-gray-600 text-center mt-2">
-            Create a new password for your account.
-          </p>
-
-          {error && (
-            <div className="bg-red-100 text-red-700 p-3 rounded mt-4 text-center border border-red-200">
-              {error}
-            </div>
-          )}
-
-          {message && (
-            <div className="bg-green-100 text-green-700 p-3 rounded mt-4 text-center border border-green-200">
-              {message}
-            </div>
-          )}
+          {error && <div className="bg-red-100 text-red-700 p-3 rounded mt-4 text-center border border-red-200">{error}</div>}
+          {message && <div className="bg-green-100 text-green-700 p-3 rounded mt-4 text-center border border-green-200">{message}</div>}
 
           <form onSubmit={handleReset} className="mt-6 space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700">
-                New Password
-              </label>
-              <input
-                type="password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="mt-2 block w-full rounded-lg border-gray-300 shadow-sm focus:ring-pink-500 focus:border-pink-500 p-3"
-                placeholder="Enter new password"
-              />
+              <label className="block text-sm font-medium text-gray-700">New Password</label>
+              <input type="password" required value={password} onChange={(e) => setPassword(e.target.value)}
+                     className="mt-2 block w-full rounded-lg border-gray-300 shadow-sm focus:ring-pink-500 focus:border-pink-500 p-3"
+                     placeholder="Enter new password"/>
             </div>
-
             <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Confirm Password
-              </label>
-              <input
-                type="password"
-                required
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                className="mt-2 block w-full rounded-lg border-gray-300 shadow-sm focus:ring-pink-500 focus:border-pink-500 p-3"
-                placeholder="Confirm new password"
-              />
+              <label className="block text-sm font-medium text-gray-700">Confirm Password</label>
+              <input type="password" required value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}
+                     className="mt-2 block w-full rounded-lg border-gray-300 shadow-sm focus:ring-pink-500 focus:border-pink-500 p-3"
+                     placeholder="Confirm new password"/>
             </div>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className={`w-full py-3 rounded-lg font-semibold transition-all text-white ${
-                loading
-                  ? "bg-pink-400 cursor-not-allowed"
-                  : "bg-pink-600 hover:bg-pink-700"
-              }`}
-            >
+            <button type="submit" disabled={loading}
+                    className={`w-full py-3 rounded-lg font-semibold transition-all text-white ${loading ? "bg-pink-400 cursor-not-allowed" : "bg-pink-600 hover:bg-pink-700"}`}>
               {loading ? "Resetting..." : "Reset Password"}
             </button>
           </form>
         </div>
       </div>
-
       <Footer />
     </>
   );
