@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { ChevronDown, Menu, X, ShoppingCart, User } from "lucide-react";
 import Checkout from "../cartSidebar/page";
 import { useRouter } from "next/navigation";
+import { useRef } from "react";
 
 export default function Navbar() {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
@@ -12,6 +13,8 @@ export default function Navbar() {
   const [isProfileOpen, setProfileOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const router = useRouter();
+  const dropdownTimerRef = useRef(null);
+  const profileTimerRef = useRef(null);
 
   const [cartItems, setCartItems] = useState(() => {
     if (typeof window !== "undefined") {
@@ -78,14 +81,15 @@ export default function Navbar() {
             <li
               className="relative"
               onMouseEnter={() => {
-                clearTimeout(window.dropdownTimer);
+                clearTimeout(dropdownTimerRef.current);
                 setDropdownOpen(true);
               }}
               onMouseLeave={() => {
-                window.dropdownTimer = setTimeout(() => {
+                dropdownTimerRef.current = setTimeout(() => {
                   setDropdownOpen(false);
                 }, 200);
               }}
+
             >
               <button className="flex items-center hover:text-pink-600 transition">
                 Products <ChevronDown size={18} className="ml-1" />
@@ -120,15 +124,15 @@ export default function Navbar() {
             <div
               className="relative"
               onMouseEnter={() => {
-                clearTimeout(window.profileTimer);
+                clearTimeout(profileTimerRef.current);
                 setProfileOpen(true);
               }}
-
               onMouseLeave={() => {
-                window.profileTimer = setTimeout(() => {
+                profileTimerRef.current = setTimeout(() => {
                   setProfileOpen(false);
-                }, 300); 
+                }, 300);
               }}
+
 
             >
               <User size={26} className="cursor-pointer hover:text-pink-600" />
