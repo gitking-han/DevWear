@@ -1,11 +1,14 @@
 "use client";
 
 export const dynamic = "force-dynamic";
+export const dynamicParams = true;
+export const revalidate = 0;
 
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
+
 
 
 export default function ResetPasswordPage() {
