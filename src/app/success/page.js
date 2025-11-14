@@ -2,26 +2,37 @@
 export const dynamic = "force-dynamic";
 
 import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
 import { toast } from "react-hot-toast";
 import Link from "next/link";
 
 export default function SuccessPage() {
-  const searchParams = useSearchParams();
-  const sessionId = searchParams.get("session_id");
-  const orderId = searchParams.get("order_id");
-
+  const [sessionId, setSessionId] = useState(null);
+  const [orderId, setOrderId] = useState(null);
   const [loading, setLoading] = useState(true);
   const [order, setOrder] = useState(null);
 
+  // Get query params from URL on client side
   useEffect(() => {
-    const fetchSession = async () => {
-      if (!sessionId || !orderId) {
+    if (typeof window !== "undefined") {
+      const urlParams = new URLSearchParams(window.location.search);
+      const sId = urlParams.get("session_id");
+      const oId = urlParams.get("order_id");
+
+      if (!sId || !oId) {
         toast.error("Missing payment details.");
         setLoading(false);
-        return;
+      } else {
+        setSessionId(sId);
+        setOrderId(oId);
       }
+    }
+  }, []);
 
+  // Fetch session info once we have the IDs
+  useEffect(() => {
+    if (!sessionId || !orderId) return;
+
+    const fetchSession = async () => {
       try {
         const res = await fetch(
           `/api/verify-session?session_id=${sessionId}&order_id=${orderId}`
@@ -31,8 +42,6 @@ export default function SuccessPage() {
         if (res.ok && data.success) {
           setOrder(data.order);
           toast.success("Payment verified successfully 🎉");
-        
-
         } else {
           toast.error(data.message || "Failed to verify payment session.");
         }
