@@ -2,29 +2,38 @@
 export const dynamic = "force-dynamic";
 
 import { useState, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import Navbar from "./navbar";
 import Footer from "./footer";
 
 export default function ResetPasswordComponent() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const token = searchParams.get("token");
-
+  const [token, setToken] = useState(null);
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // Extract token from URL on client side
   useEffect(() => {
-    if (!token) setError("Invalid or missing reset token.");
-  }, [token]);
+    if (typeof window !== "undefined") {
+      const urlParams = new URLSearchParams(window.location.search);
+      const t = urlParams.get("token");
+      if (!t) setError("Invalid or missing reset token.");
+      else setToken(t);
+    }
+  }, []);
 
   const handleReset = async (e) => {
     e.preventDefault();
     setError("");
     setMessage("");
+
+    if (!token) {
+      setError("Reset token is missing.");
+      return;
+    }
 
     if (password !== confirmPassword) {
       setError("Passwords do not match.");
