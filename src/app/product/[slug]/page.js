@@ -195,7 +195,7 @@ export default function ProductDetailPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
             {/* Left: Images */}
             <div>
-              <div className="relative w-full h-[500px] rounded-xl overflow-hidden shadow-md">
+              <div className="relative sm:w-full h-[500px] rounded-xl overflow-hidden shadow-md">
                 <Image
                   src={selectedImage}
                   alt={product.title}

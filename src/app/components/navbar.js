@@ -76,6 +76,7 @@ export default function Navbar() {
             <li><Link href="/" className="hover:text-pink-600 transition">Home</Link></li>
             <li><Link href="/about" className="hover:text-pink-600 transition">About</Link></li>
             <li><Link href="/contact" className="hover:text-pink-600 transition">Contact</Link></li>
+            <li><Link href="/shop" className="hover:text-pink-600 transition">Shop</Link></li>
 
             {/* Products Dropdown */}
             <li
@@ -146,6 +147,13 @@ export default function Navbar() {
                         onClick={() => setProfileOpen(false)}
                       >
                         My Account
+                      </Link>
+                      <Link
+                        href="/admin"
+                        className="block px-4 py-2 hover:bg-gray-100"
+                        // onClick={() => setProfileOpen(false)}
+                      >
+                        Start Selling
                       </Link>
                       <button
                         onClick={handleLogout}
