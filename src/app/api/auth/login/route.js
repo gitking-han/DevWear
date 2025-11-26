@@ -23,7 +23,21 @@ export async function POST(req) {
       expiresIn: "7d",
     });
 
-    return NextResponse.json({ success: true, token, user });
+    // Set Cookie
+    const response = NextResponse.json({ success: true, user });
+
+    response.cookies.set({
+      name: "token",
+      value: token,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",            // 🔥 REQUIRED for middleware
+      maxAge: 60 * 60 * 24 * 7, // 7 days
+    });
+
+    return response;
+
   } catch (err) {
     return NextResponse.json({ success: false, error: err.message }, { status: 500 });
   }

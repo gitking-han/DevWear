@@ -27,7 +27,7 @@ export default function LoginPage() {
       if (data.success) {
         localStorage.setItem("token", data.token);
         toast.success("Login Successfull")
-        router.push("/"); // redirect after login
+        router.push("/"); 
       } else {
         setError(data.error || "Login failed");
       }
