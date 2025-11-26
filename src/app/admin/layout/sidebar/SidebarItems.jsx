@@ -52,9 +52,9 @@ const renderMenuItems = (items, pathDirect) => {
                 isSelected={pathDirect === item?.href}
                 icon={
                     item.icon ? (
-                        <Icon icon={"solar:" + item.icon} width="24" height="24" />
+                        <Link href={item.href}><Icon icon={"solar:" + item.icon} width="24" height="24" /></Link>
                     ) : (
-                        <Icon icon="mdi:circle" width="6" height="6" />
+                        <Link href={item.href}><Icon icon="mdi:circle" width="6" height="6" /></Link>
                     )
                 }
                 component="div"
