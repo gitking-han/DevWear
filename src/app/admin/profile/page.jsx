@@ -35,6 +35,7 @@ const Profile = () => {
     if (res.ok) {
       setProfile(formData);
       setEditModal(false);
+      toast.success("Profile updated Successfuly!")
     }
   };
 
