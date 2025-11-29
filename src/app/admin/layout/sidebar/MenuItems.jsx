@@ -9,7 +9,7 @@ const Menuitems = [
     id: uniqueId(),
     title: "Dashboard",
     icon: "screencast-2-line-duotone",
-    href: "/",
+    href: "/admin",
   },
   {
     id: uniqueId(),
