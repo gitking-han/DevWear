@@ -45,9 +45,9 @@ const Menuitems = [
 },
 {
   id: uniqueId(),
-  title: "Sales",
+  title: "Orders",
   icon: "bill-check-linear",
-  href: "/admin/sales",
+  href: "/admin/orders",
 },
 {
   id: uniqueId(),

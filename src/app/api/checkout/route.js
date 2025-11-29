@@ -1,8 +1,8 @@
 import Stripe from "stripe";
 import { NextResponse } from "next/server";
-import mongoose from "mongoose";
 import Order from "@/models/Order";
 import connectToMongo from "@/lib/db";
+// import User from "@/models/User";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -19,7 +19,6 @@ export async function POST(req) {
       userId,
     } = body;
 
-    // 🧩 Basic validation
     if (!Array.isArray(items) || items.length === 0) {
       return NextResponse.json(
         { error: "No items provided for checkout." },
@@ -27,48 +26,46 @@ export async function POST(req) {
       );
     }
 
-    // 💱 Convert PKR → USD (You can make this dynamic later)
-    const pkrToUsdRate = 0.0036; // 1 PKR ≈ $0.0036 (≈ 278 PKR = 1 USD)
+    const pkrToUsdRate = 0.0036;
 
-    // 💳 Stripe line items — convert PKR → USD cents
-    const line_items = items.map((item) => {
-      const priceInUsd = item.price * pkrToUsdRate; // PKR to USD
-      return {
-        price_data: {
-          currency: "usd", // Stripe supports this
-          product_data: {
-            name: item.name || item.title,
-            metadata: { productId: item.id },
-            images: item.image ? [item.image] : [],
-          },
-          unit_amount: Math.round(priceInUsd * 100), // convert USD → cents
+    const line_items = items.map((item) => ({
+      price_data: {
+        currency: "usd",
+        product_data: {
+          name: item.name || item.title,
+          metadata: { productId: item.id },
+          images: item.image ? [item.image] : [],
         },
-        quantity: item.quantity,
-      };
-    });
+        unit_amount: Math.round(item.price * pkrToUsdRate * 100),
+      },
+      quantity: item.quantity,
+    }));
 
-    // 🧾 Calculate total (in PKR for record)
     const totalAmountPkr = items.reduce(
       (sum, item) => sum + item.price * item.quantity,
       0
     );
 
-    // ✅ Create order in MongoDB (store PKR value)
+    // let userName = "guest";
+    // if (userId) {
+    //   const user = await User.findById(userId).lean();
+    //   if (user) userName = user.name;
+    // }
+
     const newOrder = await Order.create({
-      userId: userId || "guest",
+      userId: userId || "guest", // or store both userId + customerName
       products: items.map((i) => ({
         productId: i.id,
         name: i.name || i.title,
         image: i.image,
-        price: i.price, // keep original PKR price
+        price: i.price,
         quantity: i.quantity,
       })),
       address: customer.address || "Not provided",
-      amount: totalAmountPkr, // PKR
+      amount: totalAmountPkr,
       status: "pending",
     });
 
-    // 💰 Create Stripe Checkout Session (in USD)
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       mode: "payment",

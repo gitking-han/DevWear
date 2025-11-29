@@ -223,6 +223,7 @@ const Stock = () => {
               type="number"
               className="w-full border px-3 py-2 rounded mb-3"
               placeholder="Quantity"
+              min={1}
               value={quantity}
               onChange={(e) => setQuantity(e.target.value)}
             />

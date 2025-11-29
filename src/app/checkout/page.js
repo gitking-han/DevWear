@@ -41,9 +41,9 @@ export default function Checkout() {
                         city: data.city || "",
                         postalCode: data.postalCode || "",
                     }));
-                } else {
-                    console.error(data.error || "Failed to fetch profile");
-                }
+                } //else {
+                   // console.error(data.error || "Failed to fetch profile");
+                //}
             } catch (err) {
                 console.error("Error fetching profile:", err);
             }
