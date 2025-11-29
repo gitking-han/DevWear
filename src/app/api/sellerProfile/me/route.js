@@ -1,5 +1,5 @@
 import connectToMongo from "@/lib/db";
-import Profile from "@/models/Profile";
+import sellerProfile from "@/models/sellerProfile";
 import User from "@/models/User";
 import jwt from "jsonwebtoken";
 import { NextResponse } from "next/server";
@@ -13,27 +13,33 @@ export async function GET(req) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    let decoded;
-    try {
-      decoded = jwt.verify(token, process.env.JWT_SECRET);
-    } catch (err) {
-      return NextResponse.json({ error: "Invalid or expired token" }, { status: 401 });
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    const user = await User.findById(decoded.id).lean();
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    const profile = await Profile.findOne({ user: decoded.id }).lean();
-    const user = await User.findById(decoded.id).lean();
+    let profile = await sellerProfile.findOne({ user: decoded.id }).lean();
 
-    if (!profile || !user) {
-      return NextResponse.json({ error: "Profile not found" }, { status: 404 });
+    // Auto-create empty profile if missing
+    if (!profile) {
+      profile = {
+        fname: "",
+        lname: "",
+        phone: "",
+        streat: "",
+        city: "",
+        state: "",
+        aboutMe: "",
+        postalCode: "",
+      };
     }
 
     return NextResponse.json({
       name: user.name,
       email: user.email,
-      phone: profile.phone || "",
-      address: profile.address || "",
-      city: profile.city || "",
-      postalCode: profile.postalCode || "",
+      ...profile,
     });
 
   } catch (error) {

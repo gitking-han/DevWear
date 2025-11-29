@@ -31,8 +31,9 @@ export default function ProfilePage() {
         const fetchProfile = async () => {
             try {
                 const res = await fetch("/api/profile/me", {
-                    headers: { Authorization: `Bearer ${token}` },
+                    credentials: "include",   // 🔥 Required to send cookies
                 });
+
                 const data = await res.json();
 
                 if (res.ok) {
@@ -74,10 +75,8 @@ export default function ProfilePage() {
 
             const res = await fetch("/api/profile/update", {
                 method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
-                },
+                headers: { "Content-Type": "application/json" },
+                credentials: "include",
                 body: JSON.stringify({
                     phone: profile.phone,
                     address: profile.address,
