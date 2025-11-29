@@ -30,31 +30,31 @@ const Menuitems = [
     navlabel: true,
     subheader: "UTILITIES",
   },
-{
-  id: uniqueId(),
-  title: "Products",
-  icon: "box-linear",
-  href: "/admin/products",
-},
+  {
+    id: uniqueId(),
+    title: "Products",
+    icon: "box-linear",
+    href: "/admin/products",
+  },
 
-{
-  id: uniqueId(),
-  title: "Stock",
-  icon: "archive-linear",
-  href: "/admin/stock",
-},
-{
-  id: uniqueId(),
-  title: "Orders",
-  icon: "bill-check-linear",
-  href: "/admin/orders",
-},
-{
-  id: uniqueId(),
-  title: "Profile",
-  icon: "user-linear",
-  href: "/admin/profile",
-},
+  {
+    id: uniqueId(),
+    title: "Stock",
+    icon: "archive-linear",
+    href: "/admin/stock",
+  },
+  {
+    id: uniqueId(),
+    title: "Orders",
+    icon: "bill-check-linear",
+    href: "/admin/orders",
+  },
+  {
+    id: uniqueId(),
+    title: "Profile",
+    icon: "user-linear",
+    href: "/admin/profile",
+  },
 
 
   {
@@ -64,9 +64,9 @@ const Menuitems = [
   { id: uniqueId(), title: "Login", icon: "login-2-broken", href: "/login" },
   { id: uniqueId(), title: "Register", icon: "shield-user-linear", href: "/signup" },
 
-  
 
-  
+
+
 ];
 
 export default Menuitems;
